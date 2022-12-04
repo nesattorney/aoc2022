@@ -6,13 +6,6 @@ using System.Threading.Tasks;
 
 namespace AoC2022
 {
-    enum Hand
-    {
-        rock = 1,
-        paper = 2,
-        scissors = 3,
-
-    }
     public class Day02
     {
         public static int Part1(string input)
@@ -92,8 +85,6 @@ namespace AoC2022
             }
             return score;
         }
-
-
 
         public static int Part2(string input)
         {
