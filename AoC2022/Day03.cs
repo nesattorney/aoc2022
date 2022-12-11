@@ -4,56 +4,91 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AoC2022
+namespace AoC2022;
+public class Day03
 {
-    public class Day03
+    private static Dictionary<char, int> getPriorityValues()
     {
-        public static int Part1(string input)
+        var priority = 1;
+        var priorityValues = new Dictionary<char, int>();
+        for (char letter = 'a'; letter <= 'z'; letter++)
         {
-            var lines = input.Split("\n");
+            priorityValues[letter] = priority;
+            priority++;
+        }
+        for (char letter = 'A'; letter <= 'Z'; letter++)
+        {
+            priorityValues[letter] = priority;
+            priority++;
+        }
+        return priorityValues;
+    }
 
-            var priority = 1;
-            var priorityValues = new Dictionary<char, int>();
-            for (char letter = 'a'; letter <= 'z'; letter++)
-            {
-                priorityValues[letter] = priority;
-                priority++;
-            }
-            for (char letter = 'A'; letter <= 'Z'; letter++)
-            {
-                priorityValues[letter] = priority;
-                priority++;
-            }
+    private static int calculatePriorityValues(IEnumerable<char> items)
+    {
 
-            var duplicateItems = new List<char>();
-            foreach (var line in lines)
+        var sum = 0;
+        var priorityValues = getPriorityValues();
+        foreach (var item in items)
+        {
+            sum += priorityValues[item];
+        }
+        return sum;
+    }
+    public static int Part1(string input)
+    {
+        var lines = input.Split("\n");
+        var duplicateItems = new List<char>();
+        foreach (var line in lines)
+        {
+            var compartmentSize = line.Count() / 2;
+            var characterOccurences = new Dictionary<char, bool>();
+            for (var i = 0; i < line.Length; i++)
             {
-                var compartmentSize = line.Count() / 2;
-                var characterOccurences = new Dictionary<char, bool>();
-                for (var i = 0; i < line.Length; i++)
+                if (i < compartmentSize)
                 {
-                    if (i < compartmentSize)
-                    {
-                        characterOccurences[line[i]] = true;
-                    }
-                    else if (characterOccurences.ContainsKey(line[i]))
-                    {
-                        duplicateItems.Add(line[i]);
-                        break;
-                    }
+                    characterOccurences[line[i]] = true;
+                }
+                else if (characterOccurences.ContainsKey(line[i]))
+                {
+                    duplicateItems.Add(line[i]);
+                    break;
                 }
             }
-            var sum = 0;
-            foreach (var item in duplicateItems)
-            {
-                sum += priorityValues[item];
-            }
-            return sum;
         }
+        return calculatePriorityValues(duplicateItems);
+    }
 
-        public static int Part2(string input)
+    public static int Part2(string input)
+    {
+        var items = new Dictionary<char, int>();
+        var badges = new List<char>();
+        var lineCount = 0;
+        //todo: currently counts occurenses across every 3 lines. make it look for occurences on 3 consecutive lines
+        foreach (var item in input)
         {
-            throw new NotImplementedException();
+            switch (item)
+            {
+                case '\r':
+                    continue;
+                case '\n':
+                    lineCount = (lineCount + 1) % 3;
+                    if (lineCount == 0) items = new Dictionary<char, int>();
+                    continue;
+            }
+            int itemCount;
+            if (!items.TryGetValue(item, out itemCount) && lineCount % 3 == 0)
+            {
+                items[item] = 1;
+                continue;
+            }
+            if (itemCount == lineCount)
+            {
+                itemCount++;
+                items[item] = itemCount;
+                if (itemCount == 3) badges.Add(item);
+            }
         }
+        return calculatePriorityValues(badges);
     }
 }

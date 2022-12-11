@@ -37,4 +37,11 @@ public class Tests
         var input01 = File.ReadAllText(Path.Combine("..", "..", "..", "input", "ex03.txt"));
         Assert.That(() => AoC2022.Day03.Part1(input01), Is.EqualTo(157));
     }
+
+    [Test]
+    public void Day03_Part2()
+    {
+        var input01 = File.ReadAllText(Path.Combine("..", "..", "..", "input", "ex03.txt"));
+        Assert.That(() => AoC2022.Day03.Part2(input01), Is.EqualTo(70));
+    }
 }
