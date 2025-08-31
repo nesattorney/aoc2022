@@ -1,2 +1,3 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿await Day1.Run();
+await Day2.Run();
+await Day3.Run();
